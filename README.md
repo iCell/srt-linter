@@ -13,7 +13,7 @@ Once you have [installed Go][golang-install], run the command to install the `sr
 ```
     go install github.com/iCell/srt
 ```
-You can also download [the releases](https://github.com/iCell/srt-linter/releases) directly.
+You can also download [the releases](https://github.com/iCell/srt/releases) directly.
 
 Usage
 ===
