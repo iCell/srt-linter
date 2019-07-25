@@ -36,7 +36,7 @@ func filesFromArgs(args cli.Args) ([]string, error) {
 	return files, nil
 }
 
-func lint(files []string) {
+func lint(files []string, verbose bool) {
 	for _, f := range files {
 		lint := linter.NewLinter(f)
 		results := lint.Lint()
@@ -45,7 +45,7 @@ func lint(files []string) {
 			for _, v := range results {
 				fmt.Println("  error:", v.Error.Error(), "near line:", v.LineNum)
 			}
-		} else {
+		} else if verbose {
 			fmt.Println(f)
 			fmt.Println("  no errors found")
 		}
@@ -64,6 +64,13 @@ func main() {
 		},
 	}
 
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "verbose",
+			Usage: "Prints more verbose output to the console",
+		},
+	}
+
 	app.Commands = []cli.Command{
 		cli.Command{
 			Name:  "lint",
@@ -73,7 +80,8 @@ func main() {
 				if err != nil {
 					return err
 				}
-				lint(files)
+				verbose := c.GlobalBool("verbose")
+				lint(files, verbose)
 				return nil
 			},
 		},
