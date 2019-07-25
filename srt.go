@@ -37,10 +37,12 @@ func filesFromArgs(args cli.Args) ([]string, error) {
 }
 
 func lint(files []string, verbose bool) {
+	exitcode := 0
 	for _, f := range files {
 		lint := linter.NewLinter(f)
 		results := lint.Lint()
 		if results != nil {
+			exitcode = 1
 			fmt.Println(f)
 			for _, v := range results {
 				fmt.Println("  error:", v.Error.Error(), "near line:", v.LineNum)
@@ -50,6 +52,7 @@ func lint(files []string, verbose bool) {
 			fmt.Println("  no errors found")
 		}
 	}
+	os.Exit(exitcode)
 }
 
 func main() {
