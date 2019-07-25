@@ -57,6 +57,7 @@ func lint(files []string) {
 func main() {
 	app := cli.NewApp()
 	app.Name = "srt"
+	app.Usage = "lint srt files"
 	app.Version = version
 	app.Authors = []cli.Author{
 		cli.Author{
