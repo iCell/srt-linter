@@ -41,15 +41,13 @@ func lint(files []string) {
 		lint := linter.NewLinter(f)
 		results := lint.Lint()
 		if results != nil {
-			fmt.Println(".......", f, ".......")
+			fmt.Println(f)
 			for _, v := range results {
-				fmt.Println("error:", v.Error.Error(), "near line:", v.LineNum)
+				fmt.Println("  error:", v.Error.Error(), "near line:", v.LineNum)
 			}
-			fmt.Println(".....................")
 		} else {
-			fmt.Println(".......", f, ".......")
-			fmt.Println("No errors found")
-			fmt.Println(".....................")
+			fmt.Println(f)
+			fmt.Println("  no errors found")
 		}
 	}
 }
