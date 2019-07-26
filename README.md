@@ -34,3 +34,8 @@ Lint the files within a directory and a file in another path:
 ```
     srt lint ~/files/ ~/another_files/01_file.srt
 ```
+
+Usage
+===
+
+MIT
