@@ -22,7 +22,7 @@ func filesFromArgs(args cli.Args) ([]string, error) {
 			if err != nil {
 				return err
 			}
-			if !info.IsDir() {
+			if ( !info.IsDir() && filepath.Ext(path) == ".srt" ) {
 				files = append(files, path)
 			}
 			return nil
