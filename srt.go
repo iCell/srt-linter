@@ -22,7 +22,7 @@ func filesFromArgs(args cli.Args) ([]string, error) {
 			if err != nil {
 				return err
 			}
-			if !info.IsDir() {
+			if ( !info.IsDir() && filepath.Ext(path) == ".srt" ) {
 				files = append(files, path)
 			}
 			return nil
@@ -36,32 +36,41 @@ func filesFromArgs(args cli.Args) ([]string, error) {
 	return files, nil
 }
 
-func lint(files []string) {
+func lint(files []string, verbose bool) {
+	exitcode := 0
 	for _, f := range files {
 		lint := linter.NewLinter(f)
 		results := lint.Lint()
 		if results != nil {
-			fmt.Println(".......", f, ".......")
+			exitcode = 1
+			fmt.Println(f)
 			for _, v := range results {
-				fmt.Println("error:", v.Error.Error(), "near line:", v.LineNum)
+				fmt.Println("  error:", v.Error.Error(), "near line:", v.LineNum)
 			}
-			fmt.Println(".....................")
-		} else {
-			fmt.Println(".......", f, ".......")
-			fmt.Println("No errors found")
-			fmt.Println(".....................")
+		} else if verbose {
+			fmt.Println(f)
+			fmt.Println("  no errors found")
 		}
 	}
+	os.Exit(exitcode)
 }
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "srt"
+	app.Usage = "lint srt files"
 	app.Version = version
 	app.Authors = []cli.Author{
 		cli.Author{
 			Name:  "iCell",
 			Email: "i@icell.io",
+		},
+	}
+
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "verbose",
+			Usage: "Prints more verbose output to the console",
 		},
 	}
 
@@ -74,7 +83,8 @@ func main() {
 				if err != nil {
 					return err
 				}
-				lint(files)
+				verbose := c.GlobalBool("verbose")
+				lint(files, verbose)
 				return nil
 			},
 		},
